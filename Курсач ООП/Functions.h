@@ -37,6 +37,7 @@ void ConsoleCursorVisible(bool show, short size);//делает курсоср невидимым
 
 string writeLogin(int& x, int& y);
 
+int authorization();
 void activeMenu();//начальное меню
 void menuForAdmin();// основное меню админа
 //void enterForAdmin(int active);//учет клавиши Enter для меню админа

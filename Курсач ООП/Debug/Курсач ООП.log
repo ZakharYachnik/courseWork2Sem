@@ -1,5 +1,5 @@
-﻿  Account.cpp
-C:\Users\user\Desktop\Курсач 2\Курсач ООП\Курсач ООП\Account.cpp(35,23): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\user\Desktop\Курсач 2\Курсач ООП\Курсач ООП\Account.cpp(43,23): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\user\Desktop\Курсач 2\Курсач ООП\Курсач ООП\Account.cpp(96,21): warning C4018: <: несоответствие типов со знаком и без знака
+﻿  Functions.cpp
+C:\Users\user\Desktop\Курсач 2\Курсач ООП\Курсач ООП\Functions.cpp(62,21): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\Desktop\Курсач 2\Курсач ООП\Курсач ООП\Functions.cpp(85,20): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\Desktop\Курсач 2\Курсач ООП\Курсач ООП\Functions.cpp(237,22): warning C4018: <: несоответствие типов со знаком и без знака
   Курсач ООП.vcxproj -> C:\Users\user\Desktop\Курсач 2\Курсач ООП\Debug\Курсач ООП.exe
