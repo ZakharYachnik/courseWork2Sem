@@ -4,9 +4,8 @@ int pointOfAdmin = 0;
 int pointOfUs = 0;
 fstream Inform;
 
-vector<Doctor> doctors(0);
-vector<Patient> patients(0);
-vector<Administrator> admins(0);
+vector<shared_ptr<Patient>> patients;
+vector<shared_ptr<Administrator>> admins;
 
 HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -44,110 +43,7 @@ extern void ConsoleCursorVisible(bool show, short size)
     SetConsoleCursorInfo(hStdOut, &structCursorInfo);
 }
 
-extern void activeMenu()
-{
-	system("cls");
-	pointOfAdmin = 0;
-	pointOfUs = 0;
-	string firstMenu[] = { "Авторизация", "Регистрация", "Выход" };
-	int active_menu = 0;
-
-	char ch;
-	while (true)
-	{
-		int x = 90, y = 20;
-		GoToXY(x, y);
-
-		for (int i = 0; i < size(firstMenu); i++)
-		{
-			if (i == active_menu)
-				SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-			else
-				SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN);
-			GoToXY(x, y++);
-			cout << firstMenu[i];
-		}
-
-		ch = _getch();
-		if (ch == -32) ch = _getch();
-		switch (ch)
-		{
-		case ESC:
-			exit(0);
-
-		case UP:
-			if (active_menu != 0)
-				--active_menu;
-			break;
-
-		case DOWN:
-			if (active_menu < size(firstMenu) - 1)
-				++active_menu;
-			break;
-
-		case ENTER:
-			system("cls");
-
-			switch (active_menu)
-			{
-			case 0:
-			{
-				int j = -1, flag = 0;
-				while (j != 0 && j != 1)
-				{
-					system("cls");
-					if (flag != 0)
-					{
-						GoToXY(90, 22);
-						cout << "Неверный парол или логин!";
-					}
-					flag++;
-					j = authorization();
-				}
-
-				if (j == 0)
-				{
-					system("cls");
-					menuForUser();
-				}
-				else
-				{
-					system("cls");
-					menuForAdmin();
-				}
-				break;
-			}
-
-			case 1:
-			{
-				Patient temp;
-				patients.push_back(temp);
-				patients[patients.size() - 1].registration();
-				pointOfUs =	patients.size() - 1    ; // задание позиции пациента
-				system("cls");
-				menuForUser();
-				break;
-			}
-
-			case 2:
-				exit(0);
-			}
-			break;
-		}
-	}
-}
-
-void menuForAdmin()
-{
-	cout << "Hi";
-}
-
-void menuForUser()
-{
-	cout << "Hi";
-}
-
-string writeLogin(int& x, int& y) // функция правильного ввода логина
+extern string writeLogin(int& x, int& y) // функция правильного ввода логина
 {
 	int flOnUnique = 0; // временный счетчик(флаг)
 	string tempLogin;
@@ -159,20 +55,14 @@ string writeLogin(int& x, int& y) // функция правильного ввода логина
 		cout << "Введите желаемый логин: ";
 		cin >> tempLogin;
 
-		for(auto& it: patients)
+		for (auto& it : patients)
 		{
-			if (it.getLogin() == tempLogin)
-				flOnUnique++;
-		}
-
-		for(auto& it: doctors)
-		{
-			if (it.getLogin() == tempLogin)
+			if (it->getLogin() == tempLogin)
 				flOnUnique++;
 		}
 
 		for (auto& it : admins)
-			if (it.getLogin() == tempLogin)
+			if (it->getLogin() == tempLogin)
 				flOnUnique++;
 
 
@@ -191,7 +81,7 @@ string writeLogin(int& x, int& y) // функция правильного ввода логина
 	return tempLogin;
 }
 
-int authorization()
+extern int authorization()
 {
 	char c = '1';// задание временных переменных
 	string tempLogin;
@@ -251,7 +141,40 @@ int authorization()
 				getline(Inform, temp);
 		}
 	}
-	else 
+	else
+	{
+		GoToXY(90, 26);
+		cout << "Файл не открыт!!!";
+		_getch();
+	}
+	Inform.close();
+
+	Inform.open("InformationAdmins.txt");
+	pointOfAdmin = 0; //задание номера авторизованного аккаунта 0
+	if (Inform.is_open())
+	{
+		while (!Inform.eof())
+		{
+			getline(Inform, tempLogin);// считывание из файла логина и пароля
+			getline(Inform, tempPassword);
+			for (int i = 0; i < size(tempPassword); i++)
+			{
+				tempPassword[i] -= 20;
+			}
+
+			pointOfAdmin++; // увелечение номера авторизованного аккаунта
+
+			if (tempLogin == Login)// поиск логина из записаных логинов и паролей
+				if (tempPassword == Password)
+				{
+					Inform.close();
+					return 1;//указатель на вход в аккаунт пациента
+				}
+
+			getline(Inform, temp);
+		}
+	}
+	else
 	{
 		GoToXY(90, 26);
 		cout << "Файл не открыт!!!";

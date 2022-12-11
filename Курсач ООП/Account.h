@@ -21,7 +21,6 @@ class Account
 		void setFIO(string FIO);
 
 		virtual void registration() = 0;
-		void viewDoctors();
 		void encryption();//шифровка пароля
 		void decryption();//расшифровка пароля
 

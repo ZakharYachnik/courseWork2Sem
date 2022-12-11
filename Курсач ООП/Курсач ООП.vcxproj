@@ -141,16 +141,16 @@
   <ItemGroup>
     <ClInclude Include="Account.h" />
     <ClInclude Include="Administrator.h" />
-    <ClInclude Include="Doctor.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Patient.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Account.cpp" />
     <ClCompile Include="Administrator.cpp" />
-    <ClCompile Include="Doctor.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Patient.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

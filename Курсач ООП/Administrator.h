@@ -6,8 +6,8 @@ using namespace std;
 
 class Administrator : public Account
 {
-	private:
-		void registration() {}
+	public:
+		void registration();
 		
 };
 

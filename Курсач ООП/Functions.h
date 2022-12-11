@@ -10,7 +10,8 @@
 #include <string.h>
 #include <fstream>
 #include <vector>
-#include "Doctor.h"
+#include <memory>
+#include "Menu.h"
 #include "Patient.h"
 #include "Administrator.h"
 
@@ -25,9 +26,9 @@ extern int pointOfUs;
 extern int  pointOfAdmin;
 
 extern fstream Inform;
-extern vector<Doctor> doctors;
-extern vector<Patient> patients;
-extern vector<Administrator> admins;
+extern vector<shared_ptr<Patient>> patients;
+extern vector<shared_ptr<Administrator>> admins;
+extern HANDLE hStdOut;
 
 int getNumber();//ввод числа 
 
@@ -38,10 +39,3 @@ void ConsoleCursorVisible(bool show, short size);//делает курсоср невидимым
 string writeLogin(int& x, int& y);
 
 int authorization();
-void activeMenu();//начальное меню
-void menuForAdmin();// основное меню админа
-//void enterForAdmin(int active);//учет клавиши Enter для меню админа
-void menuForUser();//основное меню для пользователя
-//void enterForUser(int active);//учет клавиши Enter в меню пользователя
-//void menuForDoctor();
-//void enterForDoctor(int active);

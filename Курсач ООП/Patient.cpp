@@ -54,7 +54,6 @@ void Patient::setDiagmosis(string diagnosis)
 
 void Patient:: registration()
 {
-	char c = '1'; //временная чаровская переменная
 	int x = 90, y = 20; //задание координат курсора
 
 	login = writeLogin(x, y);// функция правильного ввода логина
@@ -126,6 +125,11 @@ void Patient:: registration()
 		GoToXY(90, 13);
 		cout << "Ошибка открытия файла!!!";
 	}
+
+	system("cls");
+	GoToXY(90, 20);
+	cout << "Регистрация аккаунта прошла успешно!!!";
+	_getch();
 }
 
 void Patient::writeCity(int& x, int& y)
