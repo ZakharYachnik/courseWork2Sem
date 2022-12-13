@@ -21,10 +21,13 @@ class Account
 		void setFIO(string FIO);
 
 		virtual void registration() = 0;
+		virtual void deleteAccount() = 0;
 		void encryption();//шифровка пароля
 		void decryption();//расшифровка пароля
 
 		void writePassword(int& x, int& y);
 		void writeFIO(int& x, int& y);
+
+		
 
 };

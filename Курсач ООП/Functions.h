@@ -22,7 +22,7 @@ const char DOWN = 80;
 const char ESC = 27;
 const char ENTER = 13;
 
-extern int pointOfUs;
+extern int pointOfPatient;
 extern int  pointOfAdmin;
 
 extern fstream Inform;

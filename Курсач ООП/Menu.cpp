@@ -5,7 +5,7 @@ void Menu::activeMenu()
 {
 	system("cls");
 	pointOfAdmin = 0;
-	pointOfUs = 0;
+	pointOfPatient = 0;
 	string firstMenu[] = { "Авторизация", "Регистрация", "Выход" };
 	int active_menu = 0;
 
@@ -79,7 +79,7 @@ void Menu::activeMenu()
 			{
 				patients.push_back(make_shared<Patient>((*new Patient())));
 				patients[patients.size() - 1]->registration();
-				pointOfUs = patients.size() - 1; // задание позиции пациента
+				pointOfPatient = patients.size() - 1; // задание позиции пациента
 				system("cls");
 				menuForUser();
 				break;
@@ -133,6 +133,7 @@ void Menu::menuForAdmin()
 		case ENTER:
 			system("cls");
 			enterForAdmin(active_menu);
+			system("cls");
 			break;
 
 		case ESC:
@@ -144,7 +145,7 @@ void Menu::menuForAdmin()
 void Menu::menuForUser()
 {
 	system("cls");
-	string userMenu[] = { "Вывести данные на экран", "Изменить данные", "Удалить аккаунт", "Записаться на прием","Назад"};
+	string userMenu[] = { "Вывести данные на экран", "Изменить данные", "Удалить аккаунт", "Записаться на прием", "Просмотреть записи на прием", "Назад"};
 	int active_menu = 0;
 
 	char ch;
@@ -180,6 +181,7 @@ void Menu::menuForUser()
 		case ENTER:
 			system("cls");
 			enterForUser(active_menu);
+			system("cls");
 			break;
 
 		case ESC:
@@ -188,7 +190,6 @@ void Menu::menuForUser()
 	}
 }
 
-
 void Menu::enterForAdmin(int active)
 {
 
@@ -196,5 +197,41 @@ void Menu::enterForAdmin(int active)
 
 void Menu::enterForUser(int active)
 {
+	switch (active)
+	{
+		case 0:
+			patients[pointOfPatient - 1]->showInfAboutOnePatient();
+			_getch();
+			SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			break;
+		
+		case 1:
+			patients[pointOfPatient - 1]->changePatientInf();
+			_getch();
+			break;
 
+		case 2:
+			patients[pointOfPatient - 1]->deleteAccount();
+			_getch();
+			activeMenu();
+			break;
+
+		case 3:
+			patients[pointOfPatient - 1]->makeAppointment();
+			system("cls");
+			GoToXY(90, 20);
+			cout << "Вы записаны на прием!";
+			_getch();
+			break;
+
+		case 4:
+			system("cls");
+			patients[pointOfPatient - 1]->checkPatientAppointment();
+			_getch();
+			break;
+
+		case 5:
+			activeMenu();
+			break;
+	}
 }

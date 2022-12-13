@@ -1,7 +1,7 @@
 #include "Functions.h"
 
 int pointOfAdmin = 0;
-int pointOfUs = 0;
+int pointOfPatient = 0;
 fstream Inform;
 
 vector<shared_ptr<Patient>> patients;
@@ -116,7 +116,7 @@ extern int authorization()
 	ConsoleCursorVisible(false, 100);// делает курсор невидимым
 
 	Inform.open("InformationPatients.txt");
-	pointOfUs = 0; //задание номера авторизованного аккаунта 0
+	pointOfPatient = 0; //задание номера авторизованного аккаунта 0
 	if (Inform.is_open())
 	{
 		while (!Inform.eof())
@@ -128,7 +128,7 @@ extern int authorization()
 				tempPassword[i] -= 20;
 			}
 
-			pointOfUs++; // увелечение номера авторизованного аккаунта
+			pointOfPatient++; // увелечение номера авторизованного аккаунта
 
 			if (tempLogin == Login)// поиск логина из записаных логинов и паролей
 				if (tempPassword == Password)
@@ -182,10 +182,11 @@ extern int authorization()
 	}
 	Inform.close();
 
-	pointOfUs = 0;
+	pointOfPatient = 0;
 	GoToXY(x, ++y);
 	cout << "Пароль или логин неверный!";
 	Inform.close();
 
 	return -1; // в случае неудачи возвращаем -1
 }
+

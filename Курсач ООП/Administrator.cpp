@@ -51,3 +51,8 @@ void Administrator::registration()
 	cout << "Регистрация аккаунта администратора прошла успешно!!!";
 	_getch();
 }
+
+void Administrator::deleteAccount()
+{
+}
+

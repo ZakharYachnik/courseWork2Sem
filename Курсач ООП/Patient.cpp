@@ -1,5 +1,7 @@
-#include "Functions.h"
+#pragma warning(disable : 4996)
 
+#include "Functions.h"
+#include <ctime>
 
 string Patient::getBirthday()
 {
@@ -21,11 +23,10 @@ string Patient::getGender()
 	return gender;
 }
 
-string Patient::getDiagmosis()
+string Patient::getDiagnosis()
 {
 	return diagnosis;
 }
-
 
 void Patient::setBirthday(string birthday)
 {
@@ -281,4 +282,493 @@ void Patient::writeNumber(int& x, int& y)
 			GoToXY(x + 16, y);
 		}
 	}
+}
+
+void Patient::showInfAboutOnePatient()
+{
+	SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | FOREGROUND_INTENSITY | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+	GoToXY(20, 20);
+	cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+	GoToXY(20, 21);
+	cout << "|               ФИО                |      Дата рождения      |         Пол           |           Город           |        Номер телефона       |        Диагноз       |";
+	GoToXY(20, 22);
+	cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+	GoToXY(20, 23);
+	cout << "| " << setw(32) << FIO << " | " << setw(22) << birthday << setw(4) << " | " << setw(20) << this->getGender() << setw(4) << " | " << setw(24)
+		<< this->getCity() << setw(4) << " | " << setw(26) << this->getNumber() << setw(4) << " | " << setw(18) << this->getDiagnosis() << setw(4) << " |";
+	GoToXY(20, 24);
+	cout << "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+
+}
+
+void Patient::changePatientInf()
+{
+	GoToXY(90, 18);
+	cout << "Что вы хотите изменить?";
+	int activeMenu = 0;
+	string changes[] = { "Логин", "Пароль", "ФИО", "Дату рождения", "Пол", "Город", "Номер телефона", "Диагноз" };
+	char ch;
+
+	while (true)
+	{
+		int x = 90, y = 20;
+		GoToXY(x, y);
+
+		for (int i = 0; i < size(changes); i++)
+		{
+			if (i == activeMenu)
+				SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			else
+				SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN);
+			GoToXY(x, y++);
+			cout << changes[i];
+		}
+
+		ch = _getch();
+		if (ch == -32) ch = _getch();
+		switch (ch)
+		{
+		case UP:
+			if (activeMenu != 0)
+				--activeMenu;
+			break;
+
+		case DOWN:
+			if (activeMenu < size(changes) - 1)
+				++activeMenu;
+			break;
+
+		case ENTER:
+			system("cls");
+			enterForChanges(activeMenu);
+			system("cls");
+			GoToXY(90,20);
+			cout << "Изменения сохранены!";
+			return;
+			break;
+		
+		case ESC:
+			return;
+		}
+	}
+}
+
+void Patient::enterForChanges(int activeMenu)
+{
+	int x = 90, y = 20;
+
+	switch (activeMenu)
+	{
+	case 0:
+	{
+		string tempLogin = writeLogin(x, y);
+		this->setLogin(tempLogin); 
+		writePatientFile();
+		break;
+	}
+
+	case 1: {
+		this->writePassword(x, y);
+		writePatientFile();
+		break;
+	}
+	case 2:
+	{
+		this->writeFIO(x, y);
+		writePatientFile();
+		break;
+	}
+
+	case 3:
+	{
+		this->writeDate(x, y);
+		writePatientFile();
+		break;
+	}
+
+	case 4:
+	{
+		this->writeGender(x, y);
+		writePatientFile();
+		break;
+	}
+
+	case 5:
+	{
+		this->writeGender(x, y);
+		writePatientFile();
+		break;
+	}
+
+	case 6:
+	{
+		this->writeNumber(x, y);
+		writePatientFile();
+		break;
+	}
+	case 7:
+	{
+		GoToXY(90, 20);
+		string tempDiagnosis;
+		cout << "Введите диагноз: ";
+		cin >> tempDiagnosis;
+		this->setDiagmosis(tempDiagnosis);
+		writePatientFile();
+		break;
+	}
+	}
+}
+
+void Patient::writePatientFile()
+{
+	try
+	{
+		Inform.open("InformationPatients.txt", ios_base::out);
+		for(auto i : patients)
+		{
+			if (Inform.tellg() != 0) // проверка на пустоту файла
+				Inform << '\n';
+			Inform << i->login;
+			Inform << '\n';
+			i->encryption();
+			Inform << i->password;
+			i->decryption();
+			Inform << '\n' << i->FIO << '\n';
+			Inform << i->birthday << '\n';
+			Inform << i->gender << '\n';
+			Inform << i->city << '\n';
+			Inform << i->number << '\n';
+			Inform << i->diagnosis;
+		}
+
+		Inform.close();
+	}
+	catch (const exception& ex)
+	{
+		GoToXY(90, 12);
+		cout << ex.what();
+		GoToXY(90, 13);
+		cout << "Ошибка открытия файла!!!";
+	}
+}
+
+void Patient::deleteAccount()
+{
+	char ch = 0;
+	int tempInt = 0;
+	GoToXY(90, 20);
+	cout << "Вы уверены, что хотите удалить аккаунт?";
+	while (tempInt != 3)
+	{
+		if (tempInt == 0)
+			SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+		else
+			SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN);
+		GoToXY(90, 22);
+		cout << "Да";
+
+		if (tempInt == 1)
+			SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+		else
+			SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN);
+		GoToXY(90, 23);
+		cout << "Нет";
+
+		ch = _getch();
+		if (ch == -32) ch = _getch();
+		switch (ch)
+		{
+		case UP:
+			if (tempInt != 0)
+				--tempInt;
+			break;
+
+		case DOWN:
+			if (tempInt < 1)
+				++tempInt;
+			break;
+
+		case ENTER:
+			if (tempInt == 1)
+				Menu::menuForUser();
+			else
+				tempInt = 3;
+			break;
+		}
+	}
+
+	patients.erase(patients.begin() + pointOfPatient - 1);
+	writePatientFile();
+	system("cls");
+	GoToXY(90, 20);
+	cout << "Аккаунт успешно удален!";
+}
+
+void Patient::makeAppointment()
+{
+	string doctor = doctorChoice();
+	system("cls");
+	string curTime = timeNow();
+	string appointmentTime = choiceTime();
+
+	fstream report;
+	fstream allReports;
+	fstream patientReports;
+
+	try
+	{	
+		report.open("report.txt", ios_base::out);
+		report << "     !!!Запись к врачу " << doctor << "у!!!" << endl;
+		report << "Время приема у врача: " << appointmentTime << ";" << endl;
+		report << "ФИО пациента: " << this->getFIO() << ";" << endl;
+		report << "Город: " << this->getCity() << ";" << endl;
+		report << "Номер телефона пациента: " << this->getNumber() << ";" << endl;
+		report << "                     " << curTime << "." << endl;
+
+		allReports.open("allReports.txt", ios_base::app);
+		allReports << "     !!!Запись к врачу " << doctor << "у!!!" << endl;
+		allReports << "Время приема у врача: " << appointmentTime << ";" << endl;
+		allReports << "ФИО пациента: " << this->getFIO() << ";" << endl;
+		allReports << "Город: " << this->getCity() << ";" << endl;
+		allReports << "Номер телефона пациента: " << this->getNumber() << ";" << endl;
+		allReports << "                     " << curTime << "." << endl << endl;
+
+		patientReports.open(this->getLogin() + "Reports.txt", ios_base::app);
+		patientReports << "     !!!Запись к врачу " << doctor << "у!!!" << endl;
+		patientReports << "Время приема у врача: " << appointmentTime << ";" << endl;
+		patientReports << "ФИО пациента: " << this->getFIO() << ";" << endl;
+		patientReports << "Город: " << this->getCity() << ";" << endl;
+		patientReports << "Номер телефона пациента: " << this->getNumber() << ";" << endl;
+		patientReports << "                     " << curTime << "." << endl << endl;
+	}
+	catch (const exception& ex)
+	{
+		GoToXY(90, 12);
+		cout << ex.what();
+		GoToXY(90, 13);
+		cout << "Ошибка открытия файла!!!";
+	}
+
+	system("notepad C:\\Users\\user\\Desktop\\Курсач 2\\Курсач ООП\\Курсач ООП\\report.txt");
+}
+
+string Patient::doctorChoice()
+{
+	system("cls");
+	GoToXY(90, 18);
+	cout << "Выберите к какому врачу вам надо";
+
+	string doctorsMenu[] = {"Терапевт", "Хирург", "Окулист", "Офтальмолог", "Стоматолог", "Дерматолог"};
+	int active_menu = 0;
+	char ch;
+	while (true)
+	{
+		int x = 90, y = 20;
+		GoToXY(x, y);
+
+		for (int i = 0; i < size(doctorsMenu); i++)
+		{
+			if (i == active_menu)
+				SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			else
+				SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN);
+			GoToXY(x, y++);
+			cout << doctorsMenu[i];
+		}
+
+		ch = _getch();
+		if (ch == -32) ch = _getch();
+		switch (ch)
+		{
+		case UP:
+			if (active_menu != 0)
+				--active_menu;
+			break;
+
+		case DOWN:
+			if (active_menu < size(doctorsMenu) - 1)
+				++active_menu;
+			break;
+
+		case ENTER:
+			return doctorsMenu[active_menu];
+			break;
+
+		case ESC:
+			Menu::menuForUser();
+		}
+	}
+}
+
+string Patient::timeNow()
+{
+	time_t now = time(0);
+	tm* ltm = localtime(&now);
+	
+	return to_string(ltm->tm_hour) + ':' + to_string(ltm->tm_min) + ':' + to_string(ltm->tm_sec) + " " + to_string(ltm->tm_mday) + '.' + to_string(1 + ltm->tm_mon)  + '.' + to_string(1900 + ltm->tm_year);
+}
+
+string Patient::choiceTime()
+{
+	system("cls");
+	GoToXY(90, 18);
+	cout << "Выберите подходящее вам время";
+	time_t now = time(0);
+	tm* ltm = localtime(&now);
+
+	string timeMenu[4];
+	timeMenu[0] = "18:00 " + to_string(ltm->tm_mday + 1) + "." + to_string(1 + ltm->tm_mon) + "." + to_string(1900 + ltm->tm_year);
+	timeMenu[1] = "17:30 " + to_string(ltm->tm_mday + 2) + "." + to_string(1 + ltm->tm_mon) + "." + to_string(1900 + ltm->tm_year);
+	timeMenu[2] = "14:20 " + to_string(ltm->tm_mday + 3) + "." + to_string(1 + ltm->tm_mon) + "." + to_string(1900 + ltm->tm_year);
+	timeMenu[3] = "19:00 " + to_string(ltm->tm_mday + 3) + "." + to_string(1 + ltm->tm_mon) + "." + to_string(1900 + ltm->tm_year);
+
+	int active_menu = 0;
+	char ch;
+	while (true)
+	{
+		int x = 90, y = 20;
+		GoToXY(x, y);
+
+		for (int i = 0; i < size(timeMenu); i++)
+		{
+			if (i == active_menu)
+				SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			else
+				SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN);
+			GoToXY(x, y++);
+			cout << timeMenu[i];
+		}
+
+		ch = _getch();
+		if (ch == -32) ch = _getch();
+		switch (ch)
+		{
+		case UP:
+			if (active_menu != 0)
+				--active_menu;
+			break;
+
+		case DOWN:
+			if (active_menu < size(timeMenu) - 1)
+				++active_menu;
+			break;
+
+		case ENTER:
+			return timeMenu[active_menu];
+			break;
+
+		case ESC:
+			Menu::menuForUser();
+		}
+	}
+}
+
+void Patient::checkPatientAppointment()
+{
+	fstream patientReports;
+	string tempStr;
+	SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | FOREGROUND_INTENSITY | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+	try
+	{
+		patientReports.open(this->getLogin() + "Reports.txt", ios_base::in);
+		
+		int x = 5, y = 10;
+		int i = 0;
+		while (patientReports.tellg() != EOF)
+		{
+			if (i == 7)
+			{	
+				i == 0;
+				x += 50;
+				y = 10;
+			}
+			GoToXY(x, ++y);
+			getline(patientReports, tempStr);
+			cout << tempStr;
+			i++;
+		}
+	}
+	catch (const exception& ex)
+	{
+		GoToXY(90, 12);
+		cout << ex.what();
+		GoToXY(90, 13);
+		cout << "Ошибка открытия файла!!!";
+	}
+
+	SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN);
+}
+
+void readFileInformation()
+{
+	try
+	{
+		Inform.open("InformationPatients.txt");
+
+		Inform.seekg(0, ios_base::end);
+		if (Inform.tellg() == 0)
+		{
+			Inform.close();
+			return;
+		}
+		Inform.seekg(0, ios_base::beg);
+
+		while (!Inform.eof())
+		{
+			Patient tempPatient;
+			getline(Inform, tempPatient.login);
+			getline(Inform, tempPatient.password);
+			tempPatient.decryption();
+			getline(Inform, tempPatient.FIO);
+			getline(Inform, tempPatient.birthday);
+			getline(Inform, tempPatient.gender);
+			getline(Inform, tempPatient.city);
+			getline(Inform, tempPatient.number);
+			getline(Inform, tempPatient.diagnosis);
+
+			patients.push_back(make_shared<Patient>(tempPatient));
+		}
+	}
+	catch (const exception& ex)
+	{
+		GoToXY(90, 12);
+		cout << ex.what();
+		GoToXY(90, 13);
+		cout << "Ошибка открытия файла!!!";
+	}
+
+	Inform.close();
+
+	try
+	{
+		Inform.open("InformationAdmins.txt");
+
+		Inform.seekg(0, ios_base::end);
+		if (Inform.tellg() == 0)
+		{
+			Inform.close();
+			return;
+		}
+		Inform.seekg(0, ios_base::beg);
+
+		while (!Inform.eof())
+		{
+			Administrator tempAdmin;
+			getline(Inform, tempAdmin.login);
+			getline(Inform, tempAdmin.password);
+			tempAdmin.decryption();
+			getline(Inform, tempAdmin.FIO);
+
+			admins.push_back(make_shared<Administrator>(tempAdmin));
+		}
+	}
+	catch (const exception& ex)
+	{
+		GoToXY(90, 12);
+		cout << ex.what();
+		GoToXY(90, 13);
+		cout << "Ошибка открытия файла!!!";
+	}
+
+	Inform.close();
 }

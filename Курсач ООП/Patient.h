@@ -10,14 +10,12 @@ class Patient : public Account
 		string number;//номер телефона пользователя
 		string diagnosis;//диагноз пользователя
 		
-		
 	public:
 		string getBirthday();
 		string getCity();
 		string getNumber();
 		string getGender();
-		string getDiagmosis();
-
+		string getDiagnosis();
 		
 		void setBirthday(string birthday);
 		void setCity(string city);
@@ -31,4 +29,18 @@ class Patient : public Account
 		void writeGender(int& x, int& y);
 		void writeCity(int& x, int& y);
 		void writeNumber(int& x, int& y);
+
+		void showInfAboutOnePatient();
+		void changePatientInf();
+		void enterForChanges(int activeMenu);
+		void deleteAccount();
+
+		void makeAppointment();
+		static string doctorChoice();
+		static string timeNow();
+		static string choiceTime();
+		void checkPatientAppointment();
+
+		static void writePatientFile();
+		friend void readFileInformation();
 };

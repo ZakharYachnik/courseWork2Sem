@@ -48,6 +48,7 @@ void Account::decryption()
 
 void Account::writePassword(int& x, int& y)// функция введения пароля 
 {
+	password = "";
 	char c = '1';
 	GoToXY(x, ++y);
 	cout << "Введите желаемый пароль: ";
