@@ -14,6 +14,7 @@
 #include "Menu.h"
 #include "Patient.h"
 #include "Administrator.h"
+#include "SmartPointer.h"
 
 using namespace std;
 
@@ -33,7 +34,7 @@ extern HANDLE hStdOut;
 int getNumber();//ввод числа 
 
 
-void GoToXY(short x, short y);//устанавливает положение курсора
+inline void GoToXY(short x, short y);//устанавливает положение курсора
 void ConsoleCursorVisible(bool show, short size);//делает курсоср невидимым
 
 string writeLogin(int& x, int& y);

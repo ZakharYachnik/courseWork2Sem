@@ -41,6 +41,7 @@ class Patient : public Account
 		static string choiceTime();
 		void checkPatientAppointment();
 
+		static void readPatients();
 		static void writePatientFile();
 		friend void readFileInformation();
 };

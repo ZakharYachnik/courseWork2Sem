@@ -144,6 +144,7 @@
     <ClInclude Include="Functions.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Patient.h" />
+    <ClInclude Include="SmartPointer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Account.cpp" />
@@ -152,6 +153,9 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Patient.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

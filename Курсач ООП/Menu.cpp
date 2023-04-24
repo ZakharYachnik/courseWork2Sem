@@ -79,7 +79,7 @@ void Menu::activeMenu()
 			{
 				patients.push_back(make_shared<Patient>((*new Patient())));
 				patients[patients.size() - 1]->registration();
-				pointOfPatient = patients.size() - 1; // задание позиции пациента
+				pointOfPatient = patients.size(); // задание позиции пациента
 				system("cls");
 				menuForUser();
 				break;
@@ -96,8 +96,8 @@ void Menu::activeMenu()
 void Menu::menuForAdmin()
 {
 	system("cls");
-	string adminMenu[] = { "Вывести список пациентов на экран", "Сортировка списка пациентов", "Удалить аккаунт", "Вывести всех администраторов",
-						"Поиск пациентов по параметру", "Зарегистрировать аккаунт администратора","Изменить данные", "Вывести список записей" };
+	string adminMenu[] = { "Вывести список пациентов на экран", "Сортировка списка пациентов", "Удалить аккаунт", 
+						"Поиск пациентов по параметру", "Зарегистрировать аккаунт администратора","Изменить данные", "Вывести список записей на прием" };
 	int active_menu = 0;
 
 	char ch;
@@ -192,7 +192,47 @@ void Menu::menuForUser()
 
 void Menu::enterForAdmin(int active)
 {
+	switch (active)
+	{
+	case 0:
+		Administrator::showAllPatients();
+		_getch();
+		break;
 
+	case 1:
+		Administrator::sortPatients();
+		Patient::readPatients();
+		break;
+
+	case 2:
+		admins[pointOfAdmin - 1]->deleteAccount();
+		_getch();
+		activeMenu();
+		break;
+
+	case 3:
+		Administrator::searchStructure();
+		_getch();
+		break;
+
+	case 4:
+		system("cls");
+		admins[pointOfAdmin - 1]->registration();
+		break;
+
+	case 5:
+		admins[pointOfAdmin - 1]->changeAdminInf();
+		system("cls");
+		GoToXY(90, 20);
+		cout << "Изменения сохранены!";
+		break;
+
+	case 6:
+		system("cls");
+		Administrator::outputListRecords();
+		_getch();
+		break;
+	}
 }
 
 void Menu::enterForUser(int active)
@@ -202,7 +242,7 @@ void Menu::enterForUser(int active)
 		case 0:
 			patients[pointOfPatient - 1]->showInfAboutOnePatient();
 			_getch();
-			SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN);
 			break;
 		
 		case 1:

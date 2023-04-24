@@ -10,8 +10,12 @@ class Account
 		string login;//Логин 
 		string password;//пароль от акакунта 
 		string FIO;//ФИО 
+		static int amountAccounts;
 
 	public:
+		virtual void registration() = 0;
+		virtual void deleteAccount() = 0;
+
 		string getLogin();
 		string getPassword();
 		string getFIO();
@@ -20,8 +24,6 @@ class Account
 		void setPassword(string password);
 		void setFIO(string FIO);
 
-		virtual void registration() = 0;
-		virtual void deleteAccount() = 0;
 		void encryption();//шифровка пароля
 		void decryption();//расшифровка пароля
 

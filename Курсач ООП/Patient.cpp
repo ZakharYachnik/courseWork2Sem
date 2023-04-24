@@ -82,7 +82,6 @@ void Patient:: registration()
 		GoToXY(90, y + 1);
 		cout << "                          "; // очистка строки ввода ФИО
 
-
 		this->writeDate(x, y); // Правильный ввод даты
 
 		GoToXY(x, ++y);
@@ -103,7 +102,6 @@ void Patient:: registration()
 		GoToXY(x, ++y);
 		cout << "Диагноз: ";
 		cin >> diagnosis;
-		
 
 		Inform << login;//запись данных в файл
 		Inform << '\n';
@@ -419,6 +417,47 @@ void Patient::enterForChanges(int activeMenu)
 	}
 }
 
+void Patient::readPatients()
+{
+	try
+	{
+		Inform.open("InformationPatients.txt");
+
+		Inform.seekg(0, ios_base::end);
+		if (Inform.tellg() == 0)
+		{
+			Inform.close();
+			return;
+		}
+		Inform.seekg(0, ios_base::beg);
+		patients.clear();
+		while (!Inform.eof())
+		{
+			Patient tempPatient;
+			getline(Inform, tempPatient.login);
+			getline(Inform, tempPatient.password);
+			tempPatient.decryption();
+			getline(Inform, tempPatient.FIO);
+			getline(Inform, tempPatient.birthday);
+			getline(Inform, tempPatient.gender);
+			getline(Inform, tempPatient.city);
+			getline(Inform, tempPatient.number);
+			getline(Inform, tempPatient.diagnosis);
+
+			patients.push_back(make_shared<Patient>(tempPatient));
+		}
+	}
+	catch (const exception& ex)
+	{
+		GoToXY(90, 12);
+		cout << ex.what();
+		GoToXY(90, 13);
+		cout << "Ошибка открытия файла!!!";
+	}
+
+	Inform.close();
+}
+
 void Patient::writePatientFile()
 {
 	try
@@ -540,6 +579,10 @@ void Patient::makeAppointment()
 		patientReports << "Город: " << this->getCity() << ";" << endl;
 		patientReports << "Номер телефона пациента: " << this->getNumber() << ";" << endl;
 		patientReports << "                     " << curTime << "." << endl << endl;
+
+		report.close();
+		allReports.close();
+		patientReports.close();
 	}
 	catch (const exception& ex)
 	{
@@ -558,7 +601,7 @@ string Patient::doctorChoice()
 	GoToXY(90, 18);
 	cout << "Выберите к какому врачу вам надо";
 
-	string doctorsMenu[] = {"Терапевт", "Хирург", "Окулист", "Офтальмолог", "Стоматолог", "Дерматолог"};
+	string doctorsMenu[] = {"Терапевт", "Хирург", "Окулист", "Офтальмолог", "Стоматолог", "Дерматолог", "Уролог"};
 	int active_menu = 0;
 	char ch;
 	while (true)
@@ -674,19 +717,26 @@ void Patient::checkPatientAppointment()
 		
 		int x = 5, y = 10;
 		int i = 0;
+		int flagOnOutput = 0;
 		while (patientReports.tellg() != EOF)
 		{
 			if (i == 7)
 			{	
-				i == 0;
+				i = 0;
 				x += 50;
 				y = 10;
+				if (++flagOnOutput == 4)
+				{
+					x = 5;
+					y = 20;
+				}
 			}
 			GoToXY(x, ++y);
 			getline(patientReports, tempStr);
 			cout << tempStr;
 			i++;
 		}
+		patientReports.close();
 	}
 	catch (const exception& ex)
 	{
@@ -712,7 +762,6 @@ void readFileInformation()
 			return;
 		}
 		Inform.seekg(0, ios_base::beg);
-
 		while (!Inform.eof())
 		{
 			Patient tempPatient;
@@ -771,4 +820,20 @@ void readFileInformation()
 	}
 
 	Inform.close();
+}
+
+ostream& operator<<(ostream& os, Administrator& other)
+{
+	GoToXY(90,30);
+	os << other.FIO << endl << other.login;
+	return os;
+}
+
+istream& operator>>(istream& is, Administrator& other)
+{
+	is >> other.FIO;
+	is >> other.login;
+	is >> other.password;
+
+	return is;
 }
